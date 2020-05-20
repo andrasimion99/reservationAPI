@@ -4,7 +4,7 @@ const chai = require('chai');
 
 const { expect } = chai;
 
-const url = 'http://localhost:3100/api/v1';
+const url = 'https://reservationsip.herokuapp.com/api/v1';
 
 describe('/reservations ROUTES', function () {
 	this.timeout(5000);

@@ -25,7 +25,7 @@ Get the all the reservations from the db.
 -   400 - BAD_REQUEST (There was a problem fetching data)
 
 **Usage example**:  
- `localhost:3100/api/v1/reservations`
+ `https://reservationsip.herokuapp.com/api/v1/reservations`
 
 **Returned data example**:
 
@@ -87,7 +87,7 @@ Get a specific reservation by its id.
 -   400 - BAD_REQUEST (There was a problem fetching data)
 
 **Usage example**:  
- `localhost:3100/api/v1/reservations/5ead38cf340c241a2014b4b7`
+ `https://reservationsip.herokuapp.com/api/v1/reservations/5ead38cf340c241a2014b4b7`
 
 **Returned data example**:
 
@@ -126,11 +126,11 @@ Post a reservation to Reservation Database
 
 **Body example**
 
-`userId` este optional.
+`token` este optional.
 
 ```JSON
 {
-    "userId": "5eb175539dff1b3844a84ab8",
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZWIxNmZkZjRhZmJmNjU0OTY2Y2I2OGQiLCJpYXQiOjE1ODg2ODY4MzF9.zH0WgOcGZdb8WVy_eehj2-7_Otjbkd4OYCb80Uu49sc",
 	"email": "andra@gmail.com",
     "userFirstName": "Andra",
     "userLastName": "Simion",
@@ -142,7 +142,7 @@ Post a reservation to Reservation Database
 ```
 
 **Usage example**:  
- `localhost:3100/api/v1/reservations`
+ `https://reservationsip.herokuapp.com/api/v1/reservations`
 
 **Returned data example**:
 
@@ -188,7 +188,7 @@ Modifies a reservation in database.
 ```
 
 **Usage example**:  
- `localhost:3100/api/v1/reservations/5eb2868deefb31331c672029`
+ `https://reservationsip.herokuapp.com/api/v1/reservations/5eb2868deefb31331c672029`
 
 **Returned data example**:
 
@@ -230,7 +230,7 @@ Delete a reservation from database
 -   204 - NO_CONTENT
 
 **Usage example**:  
- `localhost:3100/api/v1/reservation/5eb152c9e6addf016c28e3ca`
+ `https://reservationsip.herokuapp.com/api/v1/reservation/5eb152c9e6addf016c28e3ca`
 
 **Returned data example**:
 
