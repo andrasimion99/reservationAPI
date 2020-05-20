@@ -57,8 +57,8 @@ router.patch('/:idReservation', async function (req, res) {
 router.delete('/all', async (req, res) => {
 	const result = await reservationService.deleteAll();
 	const statusCode = result.success
-		? status.NO_CONTENT
-		: status.BAD_REQUEST;
+		? statusCodes.NO_CONTENT
+		: statusCodes.BAD_REQUEST;
 
 	res.status(statusCode).json(result);
 });

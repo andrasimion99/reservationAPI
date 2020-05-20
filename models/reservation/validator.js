@@ -37,6 +37,7 @@ const reservationSchema = Joi.object().keys({
 		.regex(/^[a-fA-F0-9]{24}$/)
 		.required()
 		.error(new Error('Restaurant id invalid')),
+	token: Joi.string().error(new Error('Token invalid')),
 });
 
 module.exports = reservationSchema;

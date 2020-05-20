@@ -39,7 +39,6 @@ class ReservationService {
 
 	async submit(payload) {
 		const {
-			userId,
 			email,
 			userFirstName,
 			userLastName,
@@ -47,10 +46,10 @@ class ReservationService {
 			phoneNumber,
 			numberOfSeats,
 			restaurantId,
+			token,
 		} = payload;
 
 		const reservationData = {
-			userId,
 			email,
 			userFirstName,
 			userLastName,
@@ -58,13 +57,43 @@ class ReservationService {
 			phoneNumber,
 			numberOfSeats,
 			restaurantId,
+			token,
 		};
 
-		if (payload.userId) {
-			reservationData.guest = false;
+		let reservation;
+		let okToken = true;
+		if (payload.token) {
+			const bearer = `Bearer ${token}`;
+			fetch(
+				'https://ip-accounts.herokuapp.com/api/users/auth',
+				{
+					method: 'GET',
+					headers: {
+						Authorization: bearer,
+					},
+				},
+			)
+				.then((res) => {
+					return res.json();
+				})
+				.then((response) => {
+					if (response.success) {
+						reservationData.guest = false;
+						reservationData.userId =
+							response.data.user[0]._id;
+						reservation = new this.db.Reservation(
+							reservationData,
+						);
+					} else {
+						okToken = false;
+					}
+				})
+				.catch((error) => {
+					Logger.error(error);
+				});
+		} else {
+			reservation = new this.db.Reservation(reservationData);
 		}
-
-		const reservation = new this.db.Reservation(reservationData);
 
 		try {
 			const existsReservation = await this.db.Reservation.findByData(
@@ -91,29 +120,34 @@ class ReservationService {
 					"This restaurant doesn't have enough empty seats for your reservation.",
 				);
 			}
+			if (!okToken) {
+				throw new Error('The user is not logged in.');
+			}
 
 			if (!existsReservation && existsEmptySeats) {
 				await reservation.save();
 				await this.sendReservationMail(reservationData);
 			}
 
-			fetch(
-				'http://localhost:4000/api/clients/addReservation',
-				{
-					method: 'POST',
-					body: {
-						clientId: reservation.userId,
-						providerId: reservation.idReservation,
-						reservationId: reservation._id,
+			if (payload.token) {
+				fetch(
+					'https://ip-accounts.herokuapp.com/api/clients/addReservation',
+					{
+						method: 'POST',
+						body: {
+							clientId: reservation.userId,
+							providerId: reservation.idReservation,
+							reservationId: reservation._id,
+						},
 					},
-				},
-			)
-				.then((res) => {
-					return res.json();
-				})
-				.catch((error) => {
-					Logger.error(error);
-				});
+				)
+					.then((res) => {
+						return res.json();
+					})
+					.catch((error) => {
+						Logger.error(error);
+					});
+			}
 
 			return { success: true, data: { reservation } };
 		} catch (error) {
@@ -154,7 +188,7 @@ class ReservationService {
 		let restaurantSchedule;
 		let reservationDay;
 		await fetch(
-			`http://localhost:4000/api/users/${reservationData.restaurantId}`,
+			`https://ip-accounts.herokuapp.com/api/users/${reservationData.restaurantId}`,
 		)
 			.then((response) => response.json())
 			.then(async function (data) {
@@ -193,7 +227,7 @@ class ReservationService {
 		);
 		let restaurantQuantity = 0;
 		await fetch(
-			`http://localhost:4000/api/users/${reservationData.restaurantId}`,
+			`https://ip-accounts.herokuapp.com/api/users/${reservationData.restaurantId}`,
 		)
 			.then((response) => response.json())
 			.then((data) => {
