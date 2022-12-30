@@ -43,7 +43,7 @@
 		"nodemon": "^2.0.3",
 		"prettier": "^2.0.2",
 		"jest": "^26.0.1",
-		"mocha": "^7.1.2",
+		"mocha": "^10.2.0",
 		"supertest": "^4.0.2"
 	},
 	"autoAttachChildProcesses": true,
